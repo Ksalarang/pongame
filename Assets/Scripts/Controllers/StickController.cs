@@ -16,6 +16,7 @@ public class StickController : MonoBehaviour {
     
     float minX;
     float maxX;
+    float prevPositionX;
 
     void Awake() {
         transform = GetComponent<Transform>();
@@ -26,13 +27,16 @@ public class StickController : MonoBehaviour {
         maxX = camera.getTopRight().x - stickHalfWidth;
     }
 
-    public void moveStick(float amountX) {
+    public void moveStick(float amountX, bool ignoreSpeedLimit = false) {
         var maxAmountX = settings.stickMaxSpeed * Time.deltaTime;
-        if (Mathf.Abs(amountX) > maxAmountX) {
+        if (!ignoreSpeedLimit && Mathf.Abs(amountX) > maxAmountX) {
             amountX = maxAmountX * Mathf.Sign(amountX);
         }
-        var newX = Mathf.Clamp(position.x + amountX, minX, maxX);
+        prevPositionX = position.x;
+        var newX = Mathf.Clamp(prevPositionX + amountX, minX, maxX);
         rigidbody.MovePosition(new Vector2(newX, position.y));
     }
+
+    public float getDeltaX() => transform.localPosition.x - prevPositionX;
 }
 }

@@ -83,7 +83,7 @@ public class BotPlayer : MonoBehaviour {
                 setPointsVisible(false);
             }
             if (gameSettings.debug.autoPlay) {
-                playerStick.moveStick(ball.position.x - playerStick.position.x);
+                playerStick.moveStick(ball.position.x - playerStick.position.x, true);
             }
         }
     }

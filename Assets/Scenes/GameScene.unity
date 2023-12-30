@@ -686,6 +686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedIncreaseFactor: 1.01
+  speedTransferFactor: 10
 --- !u!4 &887341664
 Transform:
   m_ObjectHideFlags: 0
