@@ -39,6 +39,10 @@ public class GameController : MonoBehaviour {
         );
     }
 
+    void Update() {
+        Time.timeScale = settings.timeScale;
+    }
+
     public void onPlayerOneScored() {
         if (gamePaused) return;
         log.log("on player one scored");

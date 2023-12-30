@@ -22,7 +22,7 @@ public class InputController : MonoBehaviour {
     bool touching;
     #endregion
 
-    public bool paused;
+    [HideInInspector] public bool paused;
 
     void Awake() {
         log = new(GetType(), settings.log.inputController);
@@ -65,7 +65,9 @@ public class InputController : MonoBehaviour {
             case TouchPhase.Began:
                 break;
             case TouchPhase.Moved:
-                stickController.moveStick(currentPosition.x - prevPosition.x);
+                if (!settings.debug.autoPlay) {
+                    stickController.moveStick(currentPosition.x - prevPosition.x);
+                }
                 break;
             case TouchPhase.Stationary:
                 break;

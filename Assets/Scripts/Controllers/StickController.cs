@@ -12,7 +12,7 @@ public class StickController : MonoBehaviour {
     [HideInInspector] public new Transform transform;
     [HideInInspector] public new Rigidbody2D rigidbody;
 
-    public Vector2 stickPosition => rigidbody.position;
+    public Vector2 position => rigidbody.position;
     
     float minX;
     float maxX;
@@ -26,13 +26,12 @@ public class StickController : MonoBehaviour {
         maxX = camera.getTopRight().x - stickHalfWidth;
     }
 
-    public void moveStick(float deltaX) {
-        var maxDeltaX = settings.stickMaxSpeed * Time.deltaTime;
-        if (Mathf.Abs(deltaX) > maxDeltaX) {
-            deltaX = maxDeltaX * Mathf.Sign(deltaX);
+    public void moveStick(float amountX) {
+        var maxAmountX = settings.stickMaxSpeed * Time.deltaTime;
+        if (Mathf.Abs(amountX) > maxAmountX) {
+            amountX = maxAmountX * Mathf.Sign(amountX);
         }
-        var position = transform.localPosition;
-        var newX = Mathf.Clamp(position.x + deltaX, minX, maxX);
+        var newX = Mathf.Clamp(position.x + amountX, minX, maxX);
         rigidbody.MovePosition(new Vector2(newX, position.y));
     }
 }

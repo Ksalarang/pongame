@@ -1,4 +1,5 @@
 ﻿using System;
+using GameInstaller;
 using Models;
 using UnityEngine;
 using Utils;
@@ -7,8 +8,10 @@ using Zenject;
 
 namespace Controllers {
 public class BallController : MonoBehaviour {
+    [SerializeField] float speedIncreaseFactor = 1.01f;
     [Inject] Ball ball;
     [Inject] GameController gameController;
+    [Inject] GameSettings gameSettings;
 
     Log log;
     float leftBorderX;
@@ -16,6 +19,8 @@ public class BallController : MonoBehaviour {
     float topLineY;
     float bottomLineY;
     float ballHalfRadius;
+
+    float ballSpeed;
 
     void Awake() {
         log = new Log(GetType());
@@ -36,9 +41,8 @@ public class BallController : MonoBehaviour {
 
     void onBallCollisionEnter(Collider2D other) {
         var velocity = ball.velocity;
-        ball.velocity = velocity.y < 0
-            ? new Vector3(velocity.x, Mathf.Abs(velocity.y))
-            : new Vector3(velocity.x, -Mathf.Abs(velocity.y));
+        velocity.y = velocity.y < 0 ? Mathf.Abs(velocity.y) : -Mathf.Abs(velocity.y);
+        ball.velocity = velocity.normalized * (velocity.magnitude * speedIncreaseFactor);
     }
 
     void Update() {
@@ -67,7 +71,9 @@ public class BallController : MonoBehaviour {
     public void resetBall() {
         Log.log("BallController", "reset ball");
         ball.position = Vector3.zero;
-        ball.velocity = new Vector3(RandomUtils.nextFloatWithRandomSign(0.5f, 1f), RandomUtils.nextSign(3f));
+        ballSpeed = gameSettings.getDifficultySettings().ballInitialSpeed;
+        var velocity = new Vector3(RandomUtils.nextFloatWithRandomSign(), RandomUtils.nextSign());
+        ball.velocity = velocity.normalized * ballSpeed;
     }
 }
 }
