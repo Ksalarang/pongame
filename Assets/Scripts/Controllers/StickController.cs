@@ -1,6 +1,7 @@
 ﻿using System;
 using GameInstaller;
 using UnityEngine;
+using Utils;
 using Utils.Extensions;
 using Zenject;
 
@@ -13,12 +14,14 @@ public class StickController : MonoBehaviour {
     [HideInInspector] public new Rigidbody2D rigidbody;
 
     public Vector2 position => rigidbody.position;
-    
+
+    Log log;
     float minX;
     float maxX;
     float prevPositionX;
 
     void Awake() {
+        log = new Log(GetType());
         transform = GetComponent<Transform>();
         rigidbody = GetComponent<Rigidbody2D>();
         
@@ -28,15 +31,29 @@ public class StickController : MonoBehaviour {
     }
 
     public void moveStick(float amountX, bool ignoreSpeedLimit = false) {
-        var maxAmountX = settings.stickMaxSpeed * Time.deltaTime;
-        if (!ignoreSpeedLimit && Mathf.Abs(amountX) > maxAmountX) {
-            amountX = maxAmountX * Mathf.Sign(amountX);
+        if (!ignoreSpeedLimit) {
+            var maxAmountX = settings.stickMaxSpeed * Time.deltaTime;
+            if (Mathf.Abs(amountX) > maxAmountX) {
+                amountX = maxAmountX * Mathf.Sign(amountX);
+            }
         }
         prevPositionX = position.x;
         var newX = Mathf.Clamp(prevPositionX + amountX, minX, maxX);
         rigidbody.MovePosition(new Vector2(newX, position.y));
     }
 
+    public void placeStickAt(float newX) {
+        var position = this.position;
+        prevPositionX = position.x;
+        newX = Mathf.Clamp(newX, minX, maxX);
+        rigidbody.MovePosition(new Vector2(newX, position.y));
+        // log.log($"place stick: deltaX: {Mathf.Abs(newX - prevPositionX)}");
+    }
+
     public float getDeltaX() => transform.localPosition.x - prevPositionX;
+
+    public void reset() {
+        rigidbody.position = new Vector2(0, rigidbody.position.y);
+    }
 }
 }

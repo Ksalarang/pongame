@@ -687,6 +687,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedIncreaseFactor: 1.01
   speedTransferFactor: 10
+  maxTransferSpeed: 2
 --- !u!4 &887341664
 Transform:
   m_ObjectHideFlags: 0
@@ -743,6 +744,7 @@ MonoBehaviour:
   movementThreshold: 0.1
   numberOfProjectionPoints: 40
   projectionPointPrefab: {fileID: 1888019087502734390, guid: 0629a3b8861dcf64bb177f9db17c819c, type: 3}
+  ballY: 0
 --- !u!114 &887341669
 MonoBehaviour:
   m_ObjectHideFlags: 0

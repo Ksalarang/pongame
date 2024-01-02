@@ -6,6 +6,7 @@ namespace GameInstaller {
 [CreateAssetMenu(fileName = "GameSettings", menuName = "GameSettings")]
 public class GameSettings : ScriptableObject {
     [Range(0f, 2f)] public float timeScale;
+    public int targetFrameRate = 60;
     public float stickMaxSpeed = 10;
     public float delayBeforeReset = 0.5f;
     public DifficultySettings.Mode difficultyMode;

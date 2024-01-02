@@ -14,6 +14,7 @@ public class BotPlayer : MonoBehaviour {
     [SerializeField] float movementThreshold = 0.1f;
     [SerializeField] int numberOfProjectionPoints = 30;
     [SerializeField] GameObject projectionPointPrefab;
+    [SerializeField] float ballY;
     
     [Inject] Ball ball;
     [Inject(Id = StickControllerId.Stick2)] StickController botStick;
@@ -21,9 +22,11 @@ public class BotPlayer : MonoBehaviour {
     [Inject] GameSettings gameSettings;
     [Inject] new Camera camera;
 
+    Log log;
     float minX;
     float maxX;
-    bool ballStartedNearing;
+    bool isPlayerServing;
+    float initialAccuracy;
     float accuracy;
 
     int numberOfChecks;
@@ -31,6 +34,7 @@ public class BotPlayer : MonoBehaviour {
     int pointsIndex;
 
     void Awake() {
+        log = new Log(GetType());
         createProjectionPoints();
     }
 
@@ -59,32 +63,35 @@ public class BotPlayer : MonoBehaviour {
     void Update() {
         if (ball.velocity.y > 0) {
             var errorSign = 1f;
-            if (!ballStartedNearing) {
-                ballStartedNearing = true;
+            if (!isPlayerServing) {
+                isPlayerServing = true;
                 var accuracyRange = gameSettings.getDifficultySettings().botAccuracy;
-                accuracy = RandomUtils.nextFloat(accuracyRange.min, accuracyRange.max);
+                initialAccuracy = RandomUtils.nextFloat(accuracyRange.min, accuracyRange.max);
+                accuracy = initialAccuracy;
                 errorSign = RandomUtils.nextSign();
                 setPointsVisible(true);
             }
             var ballPosition = ball.position;
             var maxBallY = getMaxBallY();
             var value = (ballPosition.y + maxBallY) / (2 * maxBallY);
-            accuracy = Mathf.Lerp(accuracy, 1f, Mathf.Pow(value, 2));
+            accuracy = Mathf.Lerp(initialAccuracy, 1f, Mathf.Pow(value, 2));
             numberOfChecks = 0;
             pointsIndex = 0;
             var projectedPosition = getBallProjectedPosition(ballPosition, ball.velocity);
             if (pointsIndex > 0) hideUnusedPoints();
+            accuracy -= (numberOfChecks - 1) * 0.1f;
             var error = botStick.transform.localScale.x * (1 - accuracy);
             projectedPosition.x += error * errorSign;
             moveStick(projectedPosition);
         } else {
-            if (ballStartedNearing) {
-                ballStartedNearing = false;
+            if (isPlayerServing) {
+                isPlayerServing = false;
                 setPointsVisible(false);
             }
-            if (gameSettings.debug.autoPlay) {
-                playerStick.moveStick(ball.position.x - playerStick.position.x, true);
-            }
+            moveStick(ball.position);
+        }
+        if (gameSettings.debug.autoPlay) {
+            playerStick.moveStick(ball.position.x - playerStick.position.x, true);
         }
     }
 

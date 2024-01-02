@@ -30,7 +30,6 @@ public class InputController : MonoBehaviour {
     }
 
     void Update() {
-        if (paused) return;
         #region determine touch phase
         if (isMobile) {
             if (Input.touchCount != 1) return;
@@ -66,7 +65,8 @@ public class InputController : MonoBehaviour {
                 break;
             case TouchPhase.Moved:
                 if (!settings.debug.autoPlay) {
-                    stickController.moveStick(currentPosition.x - prevPosition.x);
+                    // stickController.moveStick((currentPosition.x - prevPosition.x) * sensitivity);
+                    stickController.placeStickAt(currentPosition.x);
                 }
                 break;
             case TouchPhase.Stationary:

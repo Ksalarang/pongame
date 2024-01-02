@@ -11,6 +11,7 @@ namespace Controllers {
 public class BallController : MonoBehaviour {
     [SerializeField] float speedIncreaseFactor = 1.01f;
     [SerializeField] float speedTransferFactor = 1f;
+    [SerializeField] float maxTransferSpeed = 1f;
     
     [Inject] Ball ball;
     [Inject] GameController gameController;
@@ -54,7 +55,9 @@ public class BallController : MonoBehaviour {
         }
         var stickController = other.GetComponent<StickController>();
         if (stickController) {
-            velocity.x += stickController.getDeltaX() * speedTransferFactor;
+            var deltaX = stickController.getDeltaX() * speedTransferFactor;
+            deltaX = Mathf.Min(Mathf.Abs(deltaX), maxTransferSpeed) * Mathf.Sign(deltaX);
+            velocity.x += deltaX;
         }
         velocity.y = velocity.y < 0 ? Mathf.Abs(velocity.y) : -Mathf.Abs(velocity.y);
         ball.velocity = velocity.normalized * (velocity.magnitude * speedIncreaseFactor);
@@ -92,7 +95,7 @@ public class BallController : MonoBehaviour {
         ball.position = Vector3.zero;
         ballSpeed = gameSettings.getDifficultySettings().ballInitialSpeed;
         var velocity = new Vector3(RandomUtils.nextFloatWithRandomSign(0f, 0.5f), playerOneServes ? 1f : -1f);
-        ball.velocity = velocity.normalized * ballSpeed / 2;
+        ball.velocity = velocity.normalized * (ballSpeed / 2);
         ballSpeedReduced = true;
     }
 }

@@ -13,6 +13,8 @@ public class GameController : MonoBehaviour {
     [Inject] new Camera camera;
     [Inject] BallController ballController;
     [Inject] InputController inputController;
+    [Inject(Id = StickControllerId.Stick1)] StickController playerStick;
+    [Inject(Id = StickControllerId.Stick2)] StickController botStick;
 
     [Inject(Id = GameObjectId.TopBorder)] GameObject topBorder;
     [Inject(Id = GameObjectId.BottomBorder)] GameObject bottomBorder;
@@ -27,7 +29,7 @@ public class GameController : MonoBehaviour {
     
     void Awake() {
         log = new Log(GetType());
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = settings.targetFrameRate;
     }
 
     void Start() {
@@ -63,6 +65,8 @@ public class GameController : MonoBehaviour {
         gamePaused = inputController.paused = true;
         StartCoroutine(Coroutines.delayAction(settings.delayBeforeReset, () => {
             ballController.resetBall();
+            botStick.reset();
+            playerStick.reset();
             gamePaused = inputController.paused = false;
         }));
     }

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: GameSettings
   m_EditorClassIdentifier: 
   timeScale: 1
+  targetFrameRate: 60
   stickMaxSpeed: 10
   delayBeforeReset: 0.5
   difficultyMode: 1
@@ -27,22 +28,22 @@ MonoBehaviour:
       ballInitialSpeed: 6
     medium:
       mode: 1
-      botMaxSpeed: 4
+      botMaxSpeed: 3
       botAccuracy:
         min: 0.33
         max: 0.66
       maxTrajectoryLines: 2
-      ballInitialSpeed: 7
+      ballInitialSpeed: 6.5
     hard:
       mode: 2
-      botMaxSpeed: 6
+      botMaxSpeed: 5
       botAccuracy:
-        min: 0.66
+        min: 0.75
         max: 1
       maxTrajectoryLines: 3
-      ballInitialSpeed: 8
+      ballInitialSpeed: 7
   log:
     inputController: 0
   debug:
     showBotPredictedPath: 0
-    autoPlay: 0
+    autoPlay: 1
