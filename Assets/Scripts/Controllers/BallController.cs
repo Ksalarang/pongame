@@ -94,7 +94,7 @@ public class BallController : MonoBehaviour {
     }
 
     public void resetBall() {
-        Log.log("BallController", "reset ball");
+        // Log.log("BallController", "reset ball");
         ball.position = Vector3.zero;
         ballSpeed = gameSettings.getDifficultySettings().ballInitialSpeed;
         var velocity = new Vector3(RandomUtils.nextFloatWithRandomSign(0f, 0.5f), playerOneServes ? 1f : -1f);

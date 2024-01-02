@@ -3,6 +3,7 @@ using GameInstaller;
 using Models;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 // ReSharper disable All
@@ -22,6 +23,7 @@ public class GameInstaller : MonoInstaller {
     [Header("UI")]
     [SerializeField] TMP_Text scoreLabel1;
     [SerializeField] TMP_Text scoreLabel2;
+    [SerializeField] Toggle autoplayToggle;
     [Header("Misc")]
     [SerializeField] new Camera camera;
     [SerializeField] GameSettings gameSettings;
@@ -40,6 +42,7 @@ public class GameInstaller : MonoInstaller {
         // UI
         bind(scoreLabel1, LabelId.Label1);
         bind(scoreLabel2, LabelId.Label2);
+        bind(autoplayToggle, ViewId.AutoplayToggle);
         // misc
         bind(camera);
         bind(gameSettings);
@@ -65,5 +68,9 @@ public enum GameObjectId {
 
 public enum LabelId {
     Label1, Label2,
+}
+
+public enum ViewId {
+    AutoplayToggle,
 }
 }

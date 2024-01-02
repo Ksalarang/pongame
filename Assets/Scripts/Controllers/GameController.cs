@@ -3,6 +3,7 @@ using GameInstaller;
 using GameScene;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Utils;
 using Utils.Extensions;
 using Zenject;
@@ -20,6 +21,7 @@ public class GameController : MonoBehaviour {
     [Inject(Id = GameObjectId.BottomBorder)] GameObject bottomBorder;
     [Inject(Id = LabelId.Label1)] TMP_Text player1Label;
     [Inject(Id = LabelId.Label2)] TMP_Text player2Label;
+    [Inject(Id = ViewId.AutoplayToggle)] Toggle autoplayToggle;
 
     Log log;
     int player1Score;
@@ -30,6 +32,14 @@ public class GameController : MonoBehaviour {
     void Awake() {
         log = new Log(GetType());
         Application.targetFrameRate = settings.targetFrameRate;
+        initAutoplayToggle();
+    }
+
+    void initAutoplayToggle() {
+        autoplayToggle.isOn = settings.debug.autoPlay;
+        autoplayToggle.onValueChanged.AddListener(value => {
+            settings.debug.autoPlay = value;
+        });
     }
 
     void Start() {
@@ -47,7 +57,7 @@ public class GameController : MonoBehaviour {
 
     public void onPlayerOneScored() {
         if (gamePaused) return;
-        log.log("on player one scored");
+        // log.log("on player one scored");
         player1Score++;
         player1Label.text = player1Score.ToString();
         onPlayerScored();
@@ -55,7 +65,7 @@ public class GameController : MonoBehaviour {
 
     public void onPlayerTwoScored() {
         if (gamePaused) return;
-        log.log("on player two scored");
+        // log.log("on player two scored");
         player2Score++;
         player2Label.text = player2Score.ToString();
         onPlayerScored();

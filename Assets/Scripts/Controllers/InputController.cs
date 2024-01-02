@@ -9,6 +9,7 @@ public class InputController : MonoBehaviour {
     [Inject] GameSettings settings;
     [Inject] new Camera camera;
     [Inject(Id = StickControllerId.Stick1)] StickController stickController;
+    [Inject] BallController ballController;
     
     Log log;
     
@@ -30,6 +31,10 @@ public class InputController : MonoBehaviour {
     }
 
     void Update() {
+        if (Input.GetKeyDown(KeyCode.R)) {
+            ballController.resetBall();
+        }
+        
         #region determine touch phase
         if (isMobile) {
             if (Input.touchCount != 1) return;
@@ -65,7 +70,6 @@ public class InputController : MonoBehaviour {
                 break;
             case TouchPhase.Moved:
                 if (!settings.debug.autoPlay) {
-                    // stickController.moveStick((currentPosition.x - prevPosition.x) * sensitivity);
                     stickController.placeStickAt(currentPosition.x);
                 }
                 break;
