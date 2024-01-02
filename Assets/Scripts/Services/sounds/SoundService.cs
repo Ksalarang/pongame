@@ -146,7 +146,7 @@ public abstract class Audio {
 }
 
 public enum SoundId {
-    BallHit1, BallHit2,
+    BallHitsPaddle1, BallHitsPaddle2, BallHitsWall1, BallHitsWall2,
 }
 
 public enum SoundtrackId {

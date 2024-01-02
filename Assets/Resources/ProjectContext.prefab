@@ -77,12 +77,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSources:
     sounds:
-    - clip: {fileID: 8300000, guid: cf652fe12dc79a344bdf591ab1062b41, type: 3}
+    - clip: {fileID: 8300000, guid: fe7a06e7999c72c4a85bcab3d03de46d, type: 3}
       audioSource: {fileID: 0}
       id: 0
-    - clip: {fileID: 8300000, guid: d6a0fd54a31cf1741ae55e2e5dbcd2d0, type: 3}
+    - clip: {fileID: 8300000, guid: 4c120fb673961f44daf1f6506351cac5, type: 3}
       audioSource: {fileID: 0}
       id: 1
+    - clip: {fileID: 8300000, guid: 16bcbcb867ac0a34c9d79d335c50faf5, type: 3}
+      audioSource: {fileID: 0}
+      id: 2
     soundtracks: []
   serviceManager: {fileID: 8637508223325363104}
 --- !u!114 &8637508223325363104

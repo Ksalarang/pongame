@@ -61,8 +61,9 @@ public class BallController : MonoBehaviour {
         }
         velocity.y = velocity.y < 0 ? Mathf.Abs(velocity.y) : -Mathf.Abs(velocity.y);
         ball.velocity = velocity.normalized * (velocity.magnitude * speedIncreaseFactor);
-        
-        soundService.playSound(SoundId.BallHit1);
+
+        var playerServing = velocity.y > 0;
+        soundService.playSound(playerServing ? SoundId.BallHitsPaddle1 : SoundId.BallHitsPaddle2);
     }
 
     void Update() {
@@ -71,9 +72,11 @@ public class BallController : MonoBehaviour {
         if (ballPosition.x - ballHalfRadius <= leftBorderX) {
             var vel = ball.velocity;
             ball.velocity = new Vector2(Mathf.Abs(vel.x), vel.y);
+            soundService.playSound(SoundId.BallHitsWall1);
         } else if (ballPosition.x + ballHalfRadius >= rightBorderX) {
             var vel = ball.velocity;
             ball.velocity = new Vector2(-Mathf.Abs(vel.x), vel.y);
+            soundService.playSound(SoundId.BallHitsWall1);
         }
         
         if (gameController.gamePaused) return;
