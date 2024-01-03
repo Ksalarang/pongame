@@ -11,6 +11,10 @@ public class GameSettings : ScriptableObject {
     public float delayBeforeReset = 0.5f;
     public float resultLabelDuration = 1f;
 
+    public Color redStickColor;
+    public Color blueStickColor;
+    public Color ballColor;
+
     public int winPoints = 10;
     public DifficultySettings.Mode difficultyMode;
     public Difficulties difficulties;

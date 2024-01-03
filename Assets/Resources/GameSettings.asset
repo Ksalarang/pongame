@@ -17,8 +17,11 @@ MonoBehaviour:
   stickMaxSpeed: 10
   delayBeforeReset: 0.5
   resultLabelDuration: 1.5
+  redStickColor: {r: 0.7264151, g: 0.10051019, b: 0.2127414, a: 1}
+  blueStickColor: {r: 0.13342905, g: 0.07025033, b: 0.6981132, a: 1}
+  ballColor: {r: 1, g: 0.8129903, b: 0, a: 1}
   winPoints: 3
-  difficultyMode: 2
+  difficultyMode: 1
   difficulties:
     easy:
       mode: 0
@@ -48,4 +51,4 @@ MonoBehaviour:
     inputController: 0
   debug:
     showBotPredictedPath: 0
-    autoPlay: 0
+    autoPlay: 1

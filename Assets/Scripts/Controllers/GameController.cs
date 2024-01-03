@@ -2,6 +2,7 @@
 using Windows;
 using GameInstaller;
 using GameScene;
+using Models;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +18,7 @@ public class GameController : MonoBehaviour {
     [Inject] InputController inputController;
     [Inject(Id = StickControllerId.Stick1)] StickController playerStick;
     [Inject(Id = StickControllerId.Stick2)] StickController botStick;
+    [Inject] Ball ball;
     [Inject] WinScoreWindow winScoreWindow;
 
     [Inject(Id = GameObjectId.TopBorder)] GameObject topBorder;
@@ -46,8 +48,7 @@ public class GameController : MonoBehaviour {
         );
         initAutoplayToggle();
         
-        // winScoreWindow.show();
-        // winScoreWindow.onHideAction = startGame;
+        assignColors();
         startGame();
     }
 
@@ -58,7 +59,22 @@ public class GameController : MonoBehaviour {
         });
     }
 
+    void assignColors() {
+        if (RandomUtils.nextBool()) {
+            botStick.spriteRenderer.color = settings.redStickColor;
+            playerStick.spriteRenderer.color = settings.blueStickColor;
+        } else {
+            botStick.spriteRenderer.color = settings.blueStickColor;
+            playerStick.spriteRenderer.color = settings.redStickColor;
+        }
+        ball.spriteRenderer.color = settings.ballColor;
+    }
+
     void startGame() {
+        startServe();
+    }
+
+    void startServe() {
         ballController.resetBall();
         botStick.reset();
         playerStick.reset();
@@ -90,12 +106,12 @@ public class GameController : MonoBehaviour {
         } else if (playerTwoPoints == settings.winPoints) {
             onGameEnd(false);
         } else {
-            startServe(settings.delayBeforeReset);
+            StartCoroutine(Coroutines.delayAction(settings.delayBeforeReset, startServe));
         }
     }
 
     void onGameEnd(bool playerWon) {
-        showResultLabel(playerWon ? "YOU WON!" : "YOU LOST", () => startServe(0));
+        showResultLabel(playerWon ? "YOU WON!" : "YOU LOST", startGame);
     }
 
     void showResultLabel(string text, Action action) {
@@ -108,15 +124,6 @@ public class GameController : MonoBehaviour {
         }));
     }
 
-    void startServe(float delay) {
-        StartCoroutine(Coroutines.delayAction(delay, () => {
-            ballController.resetBall();
-            botStick.reset();
-            playerStick.reset();
-            gamePaused = inputController.paused = false;
-        }));
-    }
-    
     void resetPoints() {
         playerOnePoints = playerTwoPoints = 0;
         playerOneLabel.text = playerOnePoints.ToString();

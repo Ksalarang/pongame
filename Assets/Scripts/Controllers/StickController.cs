@@ -12,6 +12,7 @@ public class StickController : MonoBehaviour {
 
     [HideInInspector] public new Transform transform;
     [HideInInspector] public new Rigidbody2D rigidbody;
+    [HideInInspector] public SpriteRenderer spriteRenderer;
 
     public Vector2 position => rigidbody.position;
 
@@ -24,6 +25,7 @@ public class StickController : MonoBehaviour {
         log = new Log(GetType());
         transform = GetComponent<Transform>();
         rigidbody = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         
         var stickHalfWidth = transform.localScale.x / 2;
         minX = camera.getBottomLeft().x + stickHalfWidth;

@@ -6,6 +6,7 @@ public class Ball : MonoBehaviour {
     [HideInInspector] public new Transform transform;
     [HideInInspector] public new CircleCollider2D collider;
     [HideInInspector] public new Rigidbody2D rigidbody;
+    [HideInInspector] public SpriteRenderer spriteRenderer;
     
     [HideInInspector] public Vector2 velocity;
     
@@ -20,6 +21,7 @@ public class Ball : MonoBehaviour {
         transform = base.transform;
         collider = GetComponent<CircleCollider2D>();
         rigidbody = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void OnTriggerEnter2D(Collider2D other) {
