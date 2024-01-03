@@ -1711,11 +1711,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deba12b0a324423f83242a6b05718753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  step: 0.2
-  movementThreshold: 0.1
-  numberOfProjectionPoints: 40
+  step: 0.1
+  projectionChangeThreshold: 0.1
+  numberOfProjectionPoints: 80
   projectionPointPrefab: {fileID: 1888019087502734390, guid: 0629a3b8861dcf64bb177f9db17c819c, type: 3}
-  ballY: 0
+  projectedPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &887341669
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,7 +7,6 @@ namespace Utils {
 public static class Coroutines {
     const float MinDuration = 0.001f;
     
-    //todo: check duration for 0;
     public static IEnumerator moveTo(Transform transform, Vector3 end, float duration, 
         Interpolation interpolation = Interpolation.Linear, Action action = null) {
         duration = Mathf.Max(MinDuration, duration);

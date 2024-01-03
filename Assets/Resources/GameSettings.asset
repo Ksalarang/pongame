@@ -20,15 +20,16 @@ MonoBehaviour:
   redStickColor: {r: 0.7264151, g: 0.10051019, b: 0.2127414, a: 1}
   blueStickColor: {r: 0.13342905, g: 0.07025033, b: 0.6981132, a: 1}
   ballColor: {r: 1, g: 0.8129903, b: 0, a: 1}
-  winPoints: 3
-  difficultyMode: 1
+  winPoints: 10
+  difficultyMode: 2
   difficulties:
     easy:
       mode: 0
-      botMaxSpeed: 1
+      botMaxSpeed: 2
       botAccuracy:
         min: 0
         max: 0.33
+      trajectoryAccuracyDecrease: 0
       maxTrajectoryLines: 1
       ballInitialSpeed: 6
     medium:
@@ -37,6 +38,7 @@ MonoBehaviour:
       botAccuracy:
         min: 0.33
         max: 0.66
+      trajectoryAccuracyDecrease: 0.2
       maxTrajectoryLines: 2
       ballInitialSpeed: 6.5
     hard:
@@ -45,10 +47,11 @@ MonoBehaviour:
       botAccuracy:
         min: 0.75
         max: 1
+      trajectoryAccuracyDecrease: 0.1
       maxTrajectoryLines: 3
       ballInitialSpeed: 7
   log:
     inputController: 0
   debug:
-    showBotPredictedPath: 0
+    showBotPredictedPath: 1
     autoPlay: 1

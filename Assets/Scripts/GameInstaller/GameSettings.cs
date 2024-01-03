@@ -44,6 +44,7 @@ public class DifficultySettings {
     public Mode mode;
     public float botMaxSpeed;
     public FloatRange botAccuracy;
+    public float trajectoryAccuracyDecrease;
     public int maxTrajectoryLines;
     public float ballInitialSpeed;
     

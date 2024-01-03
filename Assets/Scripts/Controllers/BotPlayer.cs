@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GameInstaller;
 using GameScene;
 using Models;
@@ -11,11 +10,10 @@ using Zenject;
 namespace Controllers {
 public class BotPlayer : MonoBehaviour {
     [SerializeField] float step = 0.1f;
-    [SerializeField] float movementThreshold = 0.1f;
+    [SerializeField] float projectionChangeThreshold = 0.1f;
     [SerializeField] int numberOfProjectionPoints = 30;
     [SerializeField] GameObject projectionPointPrefab;
-    [SerializeField] float ballY;
-    
+
     [Inject] Ball ball;
     [Inject(Id = StickControllerId.Stick2)] StickController botStick;
     [Inject(Id = StickControllerId.Stick1)] StickController playerStick;
@@ -29,20 +27,19 @@ public class BotPlayer : MonoBehaviour {
     bool isPlayerServing;
     float initialAccuracy;
     float accuracy;
+    float inaccuracyDirection = 1f;
+    float maxBallY;
+    [SerializeField] Vector3 projectedPosition;
 
     int numberOfChecks;
     List<GameObject> projectionPoints;
     int pointsIndex;
+    GameObject ballProjection;
 
     void Awake() {
         log = new Log(GetType());
         createProjectionPoints();
-    }
-
-    void Start() {
-        var ballHalfRadius = ball.transform.localScale.x / 2;
-        minX = camera.getBottomLeft().x + ballHalfRadius;
-        maxX = camera.getTopRight().x - ballHalfRadius;
+        createBallProjection();
     }
 
     void createProjectionPoints() {
@@ -54,6 +51,20 @@ public class BotPlayer : MonoBehaviour {
         }
     }
 
+    void createBallProjection() {
+        ballProjection = Instantiate(projectionPointPrefab);
+        ballProjection.GetComponent<SpriteRenderer>().color = Color.yellow;
+        ballProjection.GetComponent<SpriteRenderer>().sortingOrder = 3;
+        ballProjection.SetActive(gameSettings.debug.showBotPredictedPath);
+    }
+
+    void Start() {
+        var ballRadius = ball.transform.localScale.x / 2;
+        minX = camera.getBottomLeft().x + ballRadius;
+        maxX = camera.getTopRight().x - ballRadius;
+        maxBallY = botStick.position.y - botStick.transform.localScale.y / 2 - ballRadius;
+    }
+
     void setPointsVisible(bool visible) {
         if (!gameSettings.debug.showBotPredictedPath) return;
         foreach (var point in projectionPoints) {
@@ -63,29 +74,38 @@ public class BotPlayer : MonoBehaviour {
 
     void Update() {
         if (gameController.gamePaused) return;
-        if (ball.velocity.y > 0) {
-            var errorSign = 1f;
-            if (!isPlayerServing) {
+        if (ball.velocity.y > 0) { // the ball is coming
+            if (!isPlayerServing) { // initial preparation for receiving the ball
                 isPlayerServing = true;
                 var accuracyRange = gameSettings.getDifficultySettings().botAccuracy;
                 initialAccuracy = RandomUtils.nextFloat(accuracyRange.min, accuracyRange.max);
                 accuracy = initialAccuracy;
-                errorSign = RandomUtils.nextSign();
+                inaccuracyDirection = RandomUtils.nextSign();
                 setPointsVisible(true);
             }
             var ballPosition = ball.position;
-            var maxBallY = getMaxBallY();
             var value = (ballPosition.y + maxBallY) / (2 * maxBallY);
-            accuracy = Mathf.Lerp(initialAccuracy, 1f, Mathf.Pow(value, 2));
+            // update the accuracy
+            accuracy = Mathf.Lerp(initialAccuracy, 1f, value);
             numberOfChecks = 0;
             pointsIndex = 0;
-            var projectedPosition = getBallProjectedPosition(ballPosition, ball.velocity);
+            // update predicted ball position
+            var newProjectedPosition = getBallProjectedPosition(ballPosition, ball.velocity);
+            if (Mathf.Abs(newProjectedPosition.x - projectedPosition.x) > projectionChangeThreshold) {
+                projectedPosition = newProjectedPosition;
+            }
+            // reduce accuracy due to trajectory complexity
+            accuracy -= (numberOfChecks - 1) * gameSettings.getDifficultySettings().trajectoryAccuracyDecrease;
+            // apply inaccuracy
+            var newPosition = projectedPosition;
+            var inaccuracy = botStick.transform.localScale.x * (1 - accuracy);
+            newPosition.x += inaccuracy * inaccuracyDirection;
+            // move the stick
+            moveStick(newPosition);
+            // misc
+            ballProjection.transform.localPosition = newProjectedPosition;
             if (pointsIndex > 0) hideUnusedPoints();
-            accuracy -= (numberOfChecks - 1) * 0.1f;
-            var error = botStick.transform.localScale.x * (1 - accuracy);
-            projectedPosition.x += error * errorSign;
-            moveStick(projectedPosition);
-        } else {
+        } else { // the ball is moving away
             if (isPlayerServing) {
                 isPlayerServing = false;
                 setPointsVisible(false);
@@ -106,7 +126,6 @@ public class BotPlayer : MonoBehaviour {
     Vector3 getBallProjectedPosition(Vector2 ballPosition, Vector2 ballVelocity) {
         numberOfChecks++;
         var stepVector = ballVelocity.normalized * step;
-        var maxBallY = getMaxBallY();
         var showPoints = gameSettings.debug.showBotPredictedPath;
         var maxChecks = gameSettings.getDifficultySettings().maxTrajectoryLines;
         while (ballPosition.y < maxBallY) {
@@ -123,18 +142,11 @@ public class BotPlayer : MonoBehaviour {
         return new Vector3(ballPosition.x, maxBallY);
     }
 
-    float getMaxBallY() {
-        return botStick.position.y - botStick.transform.localScale.y / 2 - ball.transform.localScale.y / 2;
-    }
-
     void moveStick(Vector3 targetPosition) {
-        var deltaX = targetPosition.x - botStick.position.x;
-        if (Mathf.Abs(deltaX) < movementThreshold) {
-            deltaX = 0f;
-        }
-        var amountX = gameSettings.getDifficultySettings().botMaxSpeed * Time.deltaTime * Mathf.Sign(deltaX);
-        if (Mathf.Abs(amountX) > Mathf.Abs(deltaX)) {
-            amountX = deltaX;
+        var deltaPositionX = targetPosition.x - botStick.position.x;
+        var amountX = gameSettings.getDifficultySettings().botMaxSpeed * Time.deltaTime * Mathf.Sign(deltaPositionX);
+        if (Mathf.Abs(amountX) > Mathf.Abs(deltaPositionX)) {
+            amountX = deltaPositionX;
         }
         botStick.moveStick(amountX);
     }

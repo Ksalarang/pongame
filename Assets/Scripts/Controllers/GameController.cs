@@ -48,7 +48,7 @@ public class GameController : MonoBehaviour {
         );
         initAutoplayToggle();
         
-        assignColors();
+        assignStickColors();
         startGame();
     }
 
@@ -59,7 +59,7 @@ public class GameController : MonoBehaviour {
         });
     }
 
-    void assignColors() {
+    void assignStickColors() {
         if (RandomUtils.nextBool()) {
             botStick.spriteRenderer.color = settings.redStickColor;
             playerStick.spriteRenderer.color = settings.blueStickColor;
@@ -67,7 +67,6 @@ public class GameController : MonoBehaviour {
             botStick.spriteRenderer.color = settings.blueStickColor;
             playerStick.spriteRenderer.color = settings.redStickColor;
         }
-        ball.spriteRenderer.color = settings.ballColor;
     }
 
     void startGame() {

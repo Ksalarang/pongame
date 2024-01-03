@@ -1,10 +1,8 @@
-﻿using System;
-using GameInstaller;
+﻿using GameInstaller;
 using Models;
 using services.sounds;
 using UnityEngine;
 using Utils;
-using Utils.Extensions;
 using Zenject;
 
 namespace Controllers {
@@ -35,6 +33,7 @@ public class BallController : MonoBehaviour {
 
     void Start() {
         ball.onCollisionEnter = onBallCollisionEnter;
+        ball.spriteRenderer.color = gameSettings.ballColor;
         ballHalfRadius = ball.transform.localScale.x / 2;
         playerOneServes = RandomUtils.nextBool();
     }
@@ -71,11 +70,11 @@ public class BallController : MonoBehaviour {
         if (ballPosition.x - ballHalfRadius <= leftBorderX) {
             var vel = ball.velocity;
             ball.velocity = new Vector2(Mathf.Abs(vel.x), vel.y);
-            soundService.playSound(SoundId.BallHitsWall1);
+            if (vel.x < 0) soundService.playSound(SoundId.BallHitsWall1);
         } else if (ballPosition.x + ballHalfRadius >= rightBorderX) {
             var vel = ball.velocity;
             ball.velocity = new Vector2(-Mathf.Abs(vel.x), vel.y);
-            soundService.playSound(SoundId.BallHitsWall1);
+            if (vel.x > 0) soundService.playSound(SoundId.BallHitsWall1);
         }
         
         if (gameController.gamePaused) return;
@@ -89,7 +88,9 @@ public class BallController : MonoBehaviour {
             playerOneServes = false;
         }
         // update position
-        ball.rigidbody.MovePosition(ballPosition + ball.velocity * Time.deltaTime);
+        else {
+            ball.rigidbody.MovePosition(ballPosition + ball.velocity * Time.deltaTime);
+        }
     }
 
     public void resetBall() {

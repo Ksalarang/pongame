@@ -1,5 +1,4 @@
-﻿using System;
-using GameInstaller;
+﻿using GameInstaller;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;

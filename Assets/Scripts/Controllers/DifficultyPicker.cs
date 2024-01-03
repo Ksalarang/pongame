@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using GameInstaller;
 using ModestTree;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
