@@ -47,7 +47,6 @@ public class StickController : MonoBehaviour {
         prevPositionX = position.x;
         newX = Mathf.Clamp(newX, minX, maxX);
         rigidbody.MovePosition(new Vector2(newX, position.y));
-        // log.log($"place stick: deltaX: {Mathf.Abs(newX - prevPositionX)}");
     }
 
     public float getDeltaX() => transform.localPosition.x - prevPositionX;

@@ -37,7 +37,6 @@ public class BallController : MonoBehaviour {
         ball.onCollisionEnter = onBallCollisionEnter;
         ballHalfRadius = ball.transform.localScale.x / 2;
         playerOneServes = RandomUtils.nextBool();
-        resetBall();
     }
 
     public void setLimits(float leftBorderX, float rightBorderX, float topLineY, float bottomLineY) {
@@ -94,7 +93,6 @@ public class BallController : MonoBehaviour {
     }
 
     public void resetBall() {
-        // Log.log("BallController", "reset ball");
         ball.position = Vector3.zero;
         ballSpeed = gameSettings.getDifficultySettings().ballInitialSpeed;
         var velocity = new Vector3(RandomUtils.nextFloatWithRandomSign(0f, 0.5f), playerOneServes ? 1f : -1f);

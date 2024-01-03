@@ -19,6 +19,7 @@ public class BotPlayer : MonoBehaviour {
     [Inject] Ball ball;
     [Inject(Id = StickControllerId.Stick2)] StickController botStick;
     [Inject(Id = StickControllerId.Stick1)] StickController playerStick;
+    [Inject] GameController gameController;
     [Inject] GameSettings gameSettings;
     [Inject] new Camera camera;
 
@@ -61,6 +62,7 @@ public class BotPlayer : MonoBehaviour {
     }
 
     void Update() {
+        if (gameController.gamePaused) return;
         if (ball.velocity.y > 0) {
             var errorSign = 1f;
             if (!isPlayerServing) {

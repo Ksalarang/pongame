@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows;
 using GameInstaller;
 using GameScene;
 using TMPro;
@@ -16,30 +17,24 @@ public class GameController : MonoBehaviour {
     [Inject] InputController inputController;
     [Inject(Id = StickControllerId.Stick1)] StickController playerStick;
     [Inject(Id = StickControllerId.Stick2)] StickController botStick;
+    [Inject] WinScoreWindow winScoreWindow;
 
     [Inject(Id = GameObjectId.TopBorder)] GameObject topBorder;
     [Inject(Id = GameObjectId.BottomBorder)] GameObject bottomBorder;
-    [Inject(Id = LabelId.Label1)] TMP_Text player1Label;
-    [Inject(Id = LabelId.Label2)] TMP_Text player2Label;
+    [Inject(Id = ViewId.PlayerOneScoreLabel)] TMP_Text playerOneLabel;
+    [Inject(Id = ViewId.PlayerTwoScoreLabel)] TMP_Text playerTwoLabel;
     [Inject(Id = ViewId.AutoplayToggle)] Toggle autoplayToggle;
+    [Inject(Id = ViewId.GameResultLabel)] TMP_Text gameResultLabel;
 
     Log log;
-    int player1Score;
-    int player2Score;
+    int playerOnePoints;
+    int playerTwoPoints;
     
     public bool gamePaused { get; private set; }
     
     void Awake() {
         log = new Log(GetType());
         Application.targetFrameRate = settings.targetFrameRate;
-        initAutoplayToggle();
-    }
-
-    void initAutoplayToggle() {
-        autoplayToggle.isOn = settings.debug.autoPlay;
-        autoplayToggle.onValueChanged.AddListener(value => {
-            settings.debug.autoPlay = value;
-        });
     }
 
     void Start() {
@@ -49,6 +44,25 @@ public class GameController : MonoBehaviour {
             topBorder.transform.localPosition.y,
             bottomBorder.transform.localPosition.y
         );
+        initAutoplayToggle();
+        
+        // winScoreWindow.show();
+        // winScoreWindow.onHideAction = startGame;
+        startGame();
+    }
+
+    void initAutoplayToggle() {
+        autoplayToggle.isOn = settings.debug.autoPlay;
+        autoplayToggle.onValueChanged.AddListener(value => {
+            settings.debug.autoPlay = value;
+        });
+    }
+
+    void startGame() {
+        ballController.resetBall();
+        botStick.reset();
+        playerStick.reset();
+        gamePaused = inputController.paused = false;
     }
 
     void Update() {
@@ -57,28 +71,56 @@ public class GameController : MonoBehaviour {
 
     public void onPlayerOneScored() {
         if (gamePaused) return;
-        // log.log("on player one scored");
-        player1Score++;
-        player1Label.text = player1Score.ToString();
+        playerOnePoints++;
+        playerOneLabel.text = playerOnePoints.ToString();
         onPlayerScored();
     }
 
     public void onPlayerTwoScored() {
         if (gamePaused) return;
-        // log.log("on player two scored");
-        player2Score++;
-        player2Label.text = player2Score.ToString();
+        playerTwoPoints++;
+        playerTwoLabel.text = playerTwoPoints.ToString();
         onPlayerScored();
     }
 
     void onPlayerScored() {
         gamePaused = inputController.paused = true;
-        StartCoroutine(Coroutines.delayAction(settings.delayBeforeReset, () => {
+        if (playerOnePoints == settings.winPoints) {
+            onGameEnd(true);
+        } else if (playerTwoPoints == settings.winPoints) {
+            onGameEnd(false);
+        } else {
+            startServe(settings.delayBeforeReset);
+        }
+    }
+
+    void onGameEnd(bool playerWon) {
+        showResultLabel(playerWon ? "YOU WON!" : "YOU LOST", () => startServe(0));
+    }
+
+    void showResultLabel(string text, Action action) {
+        gameResultLabel.gameObject.SetActive(true);
+        gameResultLabel.text = text;
+        StartCoroutine(Coroutines.delayAction(settings.resultLabelDuration, () => {
+            gameResultLabel.gameObject.SetActive(false);
+            resetPoints();
+            action.Invoke();
+        }));
+    }
+
+    void startServe(float delay) {
+        StartCoroutine(Coroutines.delayAction(delay, () => {
             ballController.resetBall();
             botStick.reset();
             playerStick.reset();
             gamePaused = inputController.paused = false;
         }));
+    }
+    
+    void resetPoints() {
+        playerOnePoints = playerTwoPoints = 0;
+        playerOneLabel.text = playerOnePoints.ToString();
+        playerTwoLabel.text = playerTwoPoints.ToString();
     }
 }
 }

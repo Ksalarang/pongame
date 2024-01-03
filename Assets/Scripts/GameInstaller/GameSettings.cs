@@ -9,6 +9,9 @@ public class GameSettings : ScriptableObject {
     public int targetFrameRate = 60;
     public float stickMaxSpeed = 10;
     public float delayBeforeReset = 0.5f;
+    public float resultLabelDuration = 1f;
+
+    public int winPoints = 10;
     public DifficultySettings.Mode difficultyMode;
     public Difficulties difficulties;
     

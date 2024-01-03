@@ -16,11 +16,13 @@ MonoBehaviour:
   targetFrameRate: 60
   stickMaxSpeed: 10
   delayBeforeReset: 0.5
-  difficultyMode: 1
+  resultLabelDuration: 1.5
+  winPoints: 3
+  difficultyMode: 2
   difficulties:
     easy:
       mode: 0
-      botMaxSpeed: 2
+      botMaxSpeed: 1
       botAccuracy:
         min: 0
         max: 0.33
@@ -46,4 +48,4 @@ MonoBehaviour:
     inputController: 0
   debug:
     showBotPredictedPath: 0
-    autoPlay: 1
+    autoPlay: 0
