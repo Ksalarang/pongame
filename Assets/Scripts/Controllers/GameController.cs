@@ -19,14 +19,15 @@ public class GameController : MonoBehaviour {
     [Inject(Id = StickControllerId.Stick1)] StickController playerStick;
     [Inject(Id = StickControllerId.Stick2)] StickController botStick;
     [Inject] Ball ball;
-    [Inject] WinScoreWindow winScoreWindow;
 
     [Inject(Id = GameObjectId.TopBorder)] GameObject topBorder;
     [Inject(Id = GameObjectId.BottomBorder)] GameObject bottomBorder;
-    [Inject(Id = ViewId.PlayerOneScoreLabel)] TMP_Text playerOneLabel;
-    [Inject(Id = ViewId.PlayerTwoScoreLabel)] TMP_Text playerTwoLabel;
-    [Inject(Id = ViewId.AutoplayToggle)] Toggle autoplayToggle;
-    [Inject(Id = ViewId.GameResultLabel)] TMP_Text gameResultLabel;
+    [Inject(Id = UIElementId.PlayerOneScoreLabel)] TMP_Text playerOneLabel;
+    [Inject(Id = UIElementId.PlayerTwoScoreLabel)] TMP_Text playerTwoLabel;
+    [Inject(Id = UIElementId.AutoplayToggle)] Toggle autoplayToggle;
+    [Inject(Id = UIElementId.GameResultLabel)] TMP_Text gameResultLabel;
+
+    [Inject] SettingsWindow settingsWindow;
 
     Log log;
     int playerOnePoints;
@@ -127,6 +128,14 @@ public class GameController : MonoBehaviour {
         playerOnePoints = playerTwoPoints = 0;
         playerOneLabel.text = playerOnePoints.ToString();
         playerTwoLabel.text = playerTwoPoints.ToString();
+    }
+
+    public void onClickSettingsButton() {
+        gamePaused = true;
+        settingsWindow.onHideAction = () => {
+            gamePaused = false;
+        };
+        settingsWindow.show();
     }
 }
 }

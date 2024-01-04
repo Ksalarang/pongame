@@ -18,15 +18,15 @@ public class GameInstaller : MonoInstaller {
     [SerializeField] StickController stickController1;
     [SerializeField] StickController stickController2;
     [Header("Windows")]
-    [SerializeField] WinScoreWindow winScoreWindow;
+    [SerializeField] SettingsWindow settingsWindow;
     [Header("Models")]
     [SerializeField] Ball ball;
     [SerializeField] GameObject topBorder;
     [SerializeField] GameObject bottomBorder;
     [Header("UI")]
+    [SerializeField] Toggle autoplayToggle;
     [SerializeField] TMP_Text scoreLabel1;
     [SerializeField] TMP_Text scoreLabel2;
-    [SerializeField] Toggle autoplayToggle;
     [SerializeField] TMP_Text gameResultLabel;
     [Header("Misc")]
     [SerializeField] new Camera camera;
@@ -40,16 +40,16 @@ public class GameInstaller : MonoInstaller {
         bind(stickController1, StickControllerId.Stick1);
         bind(stickController2, StickControllerId.Stick2);
         // windows
-        bind(winScoreWindow);
+        bind(settingsWindow);
         // models
         bind(ball);
         bind(topBorder, GameObjectId.TopBorder);
         bind(bottomBorder, GameObjectId.BottomBorder);
         // UI
-        bind(scoreLabel1, ViewId.PlayerOneScoreLabel);
-        bind(scoreLabel2, ViewId.PlayerTwoScoreLabel);
-        bind(autoplayToggle, ViewId.AutoplayToggle);
-        bind(gameResultLabel, ViewId.GameResultLabel);
+        bind(autoplayToggle, UIElementId.AutoplayToggle);
+        bind(scoreLabel1, UIElementId.PlayerOneScoreLabel);
+        bind(scoreLabel2, UIElementId.PlayerTwoScoreLabel);
+        bind(gameResultLabel, UIElementId.GameResultLabel);
         // misc
         bind(camera);
         bind(gameSettings);
@@ -73,7 +73,7 @@ public enum GameObjectId {
     BottomBorder,
 }
 
-public enum ViewId {
+public enum UIElementId {
     AutoplayToggle,
     GameResultLabel,
     PlayerOneScoreLabel,

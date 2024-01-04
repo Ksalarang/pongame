@@ -15,7 +15,11 @@ public class GameSettings : ScriptableObject {
     public Color blueStickColor;
     public Color ballColor;
 
+    public UISettings uiSettings;
+
     public int winPoints = 10;
+    public int[] winPointList;
+    
     public DifficultySettings.Mode difficultyMode;
     public Difficulties difficulties;
     
@@ -51,6 +55,12 @@ public class DifficultySettings {
     public enum Mode {
         Easy, Medium, Hard
     }
+}
+
+[Serializable]
+public class UISettings {
+    public Color selectedButtonColor;
+    public Color unselectedButtonColor;
 }
 
 [Serializable]

@@ -20,7 +20,11 @@ MonoBehaviour:
   redStickColor: {r: 0.7264151, g: 0.10051019, b: 0.2127414, a: 1}
   blueStickColor: {r: 0.13342905, g: 0.07025033, b: 0.6981132, a: 1}
   ballColor: {r: 1, g: 0.8129903, b: 0, a: 1}
-  winPoints: 5
+  uiSettings:
+    selectedButtonColor: {r: 0.12941177, g: 0.5176471, b: 0.31764707, a: 1}
+    unselectedButtonColor: {r: 0.83137256, g: 0.83137256, b: 0.83137256, a: 1}
+  winPoints: 20
+  winPointList: 050000000a00000014000000ffffffff
   difficultyMode: 0
   difficulties:
     easy:

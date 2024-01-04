@@ -10,6 +10,7 @@ public class InputController : MonoBehaviour {
     [Inject] new Camera camera;
     [Inject(Id = StickControllerId.Stick1)] StickController stickController;
     [Inject] BallController ballController;
+    [Inject] GameController gameController;
     
     Log log;
     
@@ -31,6 +32,8 @@ public class InputController : MonoBehaviour {
     }
 
     void Update() {
+        if (gameController.gamePaused) return;
+        
         if (Input.GetKeyDown(KeyCode.R)) {
             ballController.resetBall();
         }
