@@ -12,6 +12,10 @@ using Zenject;
 
 namespace Controllers {
 public class GameController : MonoBehaviour {
+    [Header("Animations")]
+    [SerializeField] float scoreLabelScale;
+    [SerializeField] float scoreLabelScaleDuration;
+    
     [Inject] GameSettings settings;
     [Inject] new Camera camera;
     [Inject] BallController ballController;
@@ -89,6 +93,7 @@ public class GameController : MonoBehaviour {
         if (gamePaused) return;
         playerOnePoints++;
         playerOneLabel.text = playerOnePoints.ToString();
+        animateScoreLabel(playerOneLabel);
         onPlayerScored();
     }
 
@@ -96,6 +101,7 @@ public class GameController : MonoBehaviour {
         if (gamePaused) return;
         playerTwoPoints++;
         playerTwoLabel.text = playerTwoPoints.ToString();
+        animateScoreLabel(playerTwoLabel);
         onPlayerScored();
     }
 
@@ -128,6 +134,12 @@ public class GameController : MonoBehaviour {
         playerOnePoints = playerTwoPoints = 0;
         playerOneLabel.text = playerOnePoints.ToString();
         playerTwoLabel.text = playerTwoPoints.ToString();
+    }
+
+    void animateScoreLabel(TMP_Text scoreLabel) {
+        StartCoroutine(Coroutines.scaleToAndBack(scoreLabel.transform,
+            scoreLabel.transform.localScale * scoreLabelScale,
+            scoreLabelScaleDuration, false));
     }
 
     public void onClickSettingsButton() {
