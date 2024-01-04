@@ -57,7 +57,9 @@ public class StickController : MonoBehaviour {
     public float getDeltaX() => transform.localPosition.x - prevPositionX;
 
     public void reset() {
-        rigidbody.position = new Vector2(0, rigidbody.position.y);
+        var pos = new Vector2(0, position.y);
+        position = pos;
+        prevPositionX = pos.x;
     }
 }
 }
