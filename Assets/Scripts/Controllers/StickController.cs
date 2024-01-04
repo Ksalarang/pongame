@@ -13,7 +13,10 @@ public class StickController : MonoBehaviour {
     [HideInInspector] public new Rigidbody2D rigidbody;
     [HideInInspector] public SpriteRenderer spriteRenderer;
 
-    public Vector2 position => rigidbody.position;
+    public Vector2 position {
+        get => rigidbody.position;
+        private set => rigidbody.position = value;
+    }
 
     Log log;
     float minX;
@@ -44,10 +47,11 @@ public class StickController : MonoBehaviour {
     }
 
     public void placeStickAt(float newX) {
-        var position = this.position;
-        prevPositionX = position.x;
+        var pos = position;
+        prevPositionX = pos.x;
         newX = Mathf.Clamp(newX, minX, maxX);
-        rigidbody.MovePosition(new Vector2(newX, position.y));
+        // rigidbody.MovePosition(new Vector2(newX, position.y));
+        position = new Vector2(newX, pos.y);
     }
 
     public float getDeltaX() => transform.localPosition.x - prevPositionX;

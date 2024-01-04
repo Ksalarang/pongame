@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GameSettings
   m_EditorClassIdentifier: 
   timeScale: 1
-  targetFrameRate: 60
+  targetFrameRate: 120
   stickMaxSpeed: 10
   delayBeforeReset: 0.5
   resultLabelDuration: 1.5
@@ -23,7 +23,7 @@ MonoBehaviour:
   uiSettings:
     selectedButtonColor: {r: 0.12941177, g: 0.5176471, b: 0.31764707, a: 1}
     unselectedButtonColor: {r: 0.83137256, g: 0.83137256, b: 0.83137256, a: 1}
-  winPoints: 20
+  winPoints: 5
   winPointList: 050000000a00000014000000ffffffff
   difficultyMode: 0
   difficulties:
@@ -35,7 +35,7 @@ MonoBehaviour:
         max: 0.33
       trajectoryAccuracyDecrease: 0
       maxTrajectoryLines: 1
-      ballInitialSpeed: 6
+      ballInitialSpeed: 7
     medium:
       mode: 1
       botMaxSpeed: 3
@@ -44,7 +44,7 @@ MonoBehaviour:
         max: 0.66
       trajectoryAccuracyDecrease: 0.2
       maxTrajectoryLines: 2
-      ballInitialSpeed: 6.5
+      ballInitialSpeed: 8
     hard:
       mode: 2
       botMaxSpeed: 5
@@ -53,7 +53,7 @@ MonoBehaviour:
         max: 1
       trajectoryAccuracyDecrease: 0.1
       maxTrajectoryLines: 3
-      ballInitialSpeed: 7
+      ballInitialSpeed: 9
   log:
     inputController: 0
   debug:
