@@ -1,6 +1,7 @@
 ﻿using Controllers;
 using GameInstaller;
 using ModestTree;
+using Services.Vibration;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +19,7 @@ public class SettingsWindow : Window {
 
     [Inject] GameSettings gameSettings;
     [Inject] GameController gameController;
+    [Inject] VibrationService vibrationService;
     
     UISettings uiSettings;
     SelectionButton[] winPointButtons;
@@ -46,6 +48,19 @@ public class SettingsWindow : Window {
         updateWinPointButtonsStates(clickedButton);
         gameSettings.winPoints = getWinPointsForButton(clickedButton);
         gameController.resetCurrentGame();
+
+        var index = winPointButtons.IndexOf(clickedButton);
+        switch (index) {
+            case 0:
+                vibrationService.vibrate(VibrationType.Ms30);
+                break;
+            case 1:
+                vibrationService.vibrate(VibrationType.Ms50);
+                break;
+            case 2:
+                vibrationService.vibrate(VibrationType.Ms100);
+                break;
+        }
     }
 
     void updateWinPointButtonsStates(SelectionButton selectedButton) {

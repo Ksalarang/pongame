@@ -1,6 +1,7 @@
 ﻿using GameInstaller;
 using Models;
 using services.sounds;
+using Services.Vibration;
 using UnityEngine;
 using Utils;
 using Zenject;
@@ -15,6 +16,7 @@ public class BallController : MonoBehaviour {
     [Inject] GameController gameController;
     [Inject] GameSettings gameSettings;
     [Inject] SoundService soundService;
+    [Inject] VibrationService vibrationService;
 
     Log log;
     float leftBorderX;
@@ -62,6 +64,7 @@ public class BallController : MonoBehaviour {
 
         var playerServing = velocity.y > 0;
         soundService.playSound(playerServing ? SoundId.BallHitsPaddle1 : SoundId.BallHitsPaddle2);
+        if (playerServing) vibrationService.vibrate(VibrationType.Ms20);
     }
 
     void Update() {

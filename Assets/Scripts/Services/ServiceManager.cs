@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using services.saves;
 using services.sounds;
+using Services.Vibration;
 using UnityEngine;
 using Utils;
 using utils.interfaces;
@@ -11,6 +12,7 @@ public class ServiceManager: MonoBehaviour {
     [Inject] SoundService soundService;
     [Inject] PlayerPrefsService playerPrefsService;
     [Inject] SaveService saveService;
+    [Inject] VibrationService vibrationService;
 
     Log log;
     List<AppLifecycleListener> appLifecycleListeners;
@@ -26,6 +28,7 @@ public class ServiceManager: MonoBehaviour {
     void registerServices() {
         log.log("register services");
         registerService(soundService);
+        registerService(vibrationService);
         registerService(playerPrefsService);
         registerService(saveService);
         onSavesLoaded();

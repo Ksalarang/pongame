@@ -1,6 +1,7 @@
 ﻿using services;
 using services.saves;
 using services.sounds;
+using Services.Vibration;
 using UnityEngine;
 using Zenject;
 
@@ -18,6 +19,7 @@ public class ServiceInstaller : MonoInstaller {
         bind<SoundService>();
         bind<PlayerPrefsService>();
         bind<SaveService, SimpleSaveService>();
+        bind<VibrationService>();
         // service manager
         bind(serviceManager);
     }
