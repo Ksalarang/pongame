@@ -27,7 +27,6 @@ public class BotPlayer : MonoBehaviour {
     bool isPlayerServing;
     float initialAccuracy;
     float accuracy;
-    float inaccuracyDirection = 1f;
     float maxBallY;
     [SerializeField] Vector3 projectedPosition;
 
@@ -70,6 +69,7 @@ public class BotPlayer : MonoBehaviour {
         foreach (var point in projectionPoints) {
             point.SetActive(visible);
         }
+        ballProjection.gameObject.SetActive(visible);
     }
 
     void Update() {
@@ -80,13 +80,12 @@ public class BotPlayer : MonoBehaviour {
                 var accuracyRange = gameSettings.getDifficultySettings().botAccuracy;
                 initialAccuracy = RandomUtils.nextFloat(accuracyRange.min, accuracyRange.max);
                 accuracy = initialAccuracy;
-                inaccuracyDirection = RandomUtils.nextSign();
                 setPointsVisible(true);
             }
             var ballPosition = ball.position;
             var value = (ballPosition.y + maxBallY) / (2 * maxBallY);
             // update the accuracy
-            accuracy = Mathf.Lerp(initialAccuracy, 1f, value);
+            accuracy = Mathf.Lerp(initialAccuracy, 1f, Mathf.Pow(value, 2));
             numberOfChecks = 0;
             pointsIndex = 0;
             // update predicted ball position
@@ -99,6 +98,7 @@ public class BotPlayer : MonoBehaviour {
             // apply inaccuracy
             var newPosition = projectedPosition;
             var inaccuracy = botStick.transform.localScale.x * (1 - accuracy);
+            var inaccuracyDirection = MathUtils.signOf(botStick.position.x - projectedPosition.x);
             newPosition.x += inaccuracy * inaccuracyDirection;
             // move the stick
             moveStick(newPosition);

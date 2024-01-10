@@ -25,7 +25,7 @@ public class VibrationService : Service, SaveLoadListener {
 
     [Inject]
     public VibrationService() {
-        log = new(GetType());
+        log = new(GetType(), false);
         log.log("create");
     }
 

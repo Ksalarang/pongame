@@ -7,6 +7,12 @@ public static class MathUtils {
         return min < c ? min : c;
     }
 
+    public static float signOf(float f) {
+        if (f > 0) return 1f;
+        if (f < 0) return -1f;
+        return 0f;
+    }
+
     /// <summary>
     /// Ensures that the value is not less than the specified min value.
     /// </summary>
