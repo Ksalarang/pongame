@@ -79,10 +79,14 @@ public class GameController : MonoBehaviour {
     }
 
     void startServe() {
+        resetBallAndSticks();
+        gamePaused = inputController.paused = false;
+    }
+
+    void resetBallAndSticks() {
         ballController.resetBall();
         botStick.reset();
         playerStick.reset();
-        gamePaused = inputController.paused = false;
     }
 
     void Update() {
@@ -117,7 +121,10 @@ public class GameController : MonoBehaviour {
     }
 
     void onGameEnd(bool playerWon) {
-        showResultLabel(playerWon ? "YOU WON!" : "YOU LOST", startGame);
+        showResultLabel(playerWon ? "YOU WON!" : "YOU LOST", () => {
+            resetPoints();
+            startGame();
+        });
     }
 
     void showResultLabel(string text, Action action) {
@@ -125,7 +132,6 @@ public class GameController : MonoBehaviour {
         gameResultLabel.text = text;
         StartCoroutine(Coroutines.delayAction(settings.resultLabelDuration, () => {
             gameResultLabel.gameObject.SetActive(false);
-            resetPoints();
             action.Invoke();
         }));
     }
@@ -148,6 +154,11 @@ public class GameController : MonoBehaviour {
             gamePaused = false;
         };
         settingsWindow.show();
+    }
+
+    public void resetCurrentGame() {
+        resetPoints();
+        resetBallAndSticks();
     }
 }
 }

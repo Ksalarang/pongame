@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Controllers;
 using GameInstaller;
 using ModestTree;
 using UI;
@@ -18,8 +17,9 @@ public class SettingsWindow : Window {
     [SerializeField] SelectionButton winPointButton4;
 
     [Inject] GameSettings gameSettings;
+    [Inject] GameController gameController;
+    
     UISettings uiSettings;
-
     SelectionButton[] winPointButtons;
 
     void Awake() {
@@ -43,11 +43,16 @@ public class SettingsWindow : Window {
     }
     
     void onClickWinPointButton(SelectionButton clickedButton) {
+        updateWinPointButtonsStates(clickedButton);
         gameSettings.winPoints = getWinPointsForButton(clickedButton);
+        gameController.resetCurrentGame();
+    }
+
+    void updateWinPointButtonsStates(SelectionButton selectedButton) {
         var selectedColor = uiSettings.selectedButtonColor;
         var unselectedColor = uiSettings.unselectedButtonColor;
         foreach (var button in winPointButtons) {
-            button.setSelected(button == clickedButton, selectedColor, unselectedColor);
+            button.setSelected(button == selectedButton, selectedColor, unselectedColor);
         }
     }
 
